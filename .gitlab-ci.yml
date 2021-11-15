@@ -1,0 +1,43 @@
+image: node:14.17.6-buster
+
+cache:
+  paths:
+    - node_modules/
+
+build-h5:
+  stage: build
+  script:
+    - yarn
+    - npm run build:h5
+    - mv dist/build/h5/ client-mini-app-h5/
+    - mv CHANGELOG.md client-mini-app-h5/
+  artifacts:
+    paths:
+      - client-mini-app-h5
+    expire_in: 1 week
+
+build-app-plus:
+  stage: build
+  script:
+    - yarn
+    - npm run build:app-plus
+    - mv dist/build/app-plus/ client-mini-app-app-plus/
+    - mv CHANGELOG.md client-mini-app-app-plus/
+    - git rev-list HEAD --first-parent --count > client-mini-app-app-plus/GIT_COMMIT_COUNT
+    - cat client-mini-app-app-plus/GIT_COMMIT_COUNT
+  artifacts:
+    paths:
+      - client-mini-app-app-plus
+    expire_in: 1 week
+
+build-weixin:
+  stage: build
+  script:
+    - yarn
+    - npm run build:mp-weixin
+    - mv dist/build/mp-weixin/ client-mini-app-weixin/
+    - mv CHANGELOG.md client-mini-app-weixin/
+  artifacts:
+    paths:
+      - client-mini-app-weixin
+    expire_in: 1 week
